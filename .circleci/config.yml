@@ -3,24 +3,13 @@ jobs:
   build:
     working_directory: ~/ProductCatalog
     docker:
-      - image: circleci/android:api-28-alpha
+      - image: ccistaging/android:api-28-alpha
     environment:
       JVM_OPTS: -Xmx3200m
     steps:
       - checkout
       - restore_cache:
           key: jars-{{ checksum "build.gradle" }}-{{ checksum  "app/build.gradle" }}
-      - run:
-          name: Install OpenJDK 11
-          command: |
-            sudo apt-get update
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y software-properties-common
-            sudo add-apt-repository ppa:openjdk-r/ppa
-            sudo apt-get update  
-            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y openjdk-11-jdk
-            sudo update-alternatives --set java /usr/lib/jvm/java-11-openjdk-amd64/bin/java
-            sudo update-alternatives --set javac /usr/lib/jvm/java-11-openjdk-amd64/bin/javac
-            java -version
       - run:
           name: Chmod permissions
           command: sudo chmod +x ./gradlew
